@@ -1,0 +1,158 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #333333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #2C3E50; /* Dark blue */
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #34495E; /* Slightly lighter blue */
+    margin-bottom: 20px;
+    border-bottom: 2px solid #BDC3C7; /* Light gray */
+    padding-bottom: 10px;
+}
+
+/* Task List Section */
+.task-list-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.task-item {
+    background-color: #F2F3F5; /* Light gray background for task items */
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #E1E4E8;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-item strong {
+    color: #2980B9; /* Soft blue for task titles */
+}
+
+.delete-button {
+    background-color: #E74C3C; /* Red for delete button */
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #C0392B; /* Darker red on hover */
+}
+
+/* Add Task Form */
+.task-form-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #ECF0F1; /* Light blue-gray background for the form */
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #2C3E50;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #BDC3C7; /* Light gray border */
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #2980B9; /* Blue border on focus */
+    outline: none;
+}
+
+.submit-button {
+    background-color: #3498DB; /* Bright blue for submit button */
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #2980B9; /* Darker blue on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .task-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .task-item button {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .submit-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .task-item {
+        padding: 12px;
+    }
+}
