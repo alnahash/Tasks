@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager with Firebase</title>
+    <style>
+        /* Inline CSS for styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .task-list-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-item {
+            background: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-item strong {
+            color: #007bff;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+
+        .task-form-section .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .submit-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Task Manager with Firebase</h1>
+        </header>
+
+        <!-- Task List -->
+        <section class="task-list-section">
+            <h2>Task List</h2>
+            <ul id="task-list"></ul>
+        </section>
+
+        <!-- Add Task Form -->
+        <section class="task-form-section">
+            <h2>Add a New Task</h2>
+            <form id="task-form">
+                <div class="form-group">
+                    <label for="title">Task Title:</label>
+                    <input type="text" id="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Task Description:</label>
+                    <textarea id="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="due-date">Due Date:</label>
+                    <input type="date" id="due-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Reminder Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <button type="submit" class="submit-button">Add Task</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
+
+    <script>
+        // Firebase configuration - replace with your Firebase project config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const taskList = document.getElementById('task-list');
+        const taskForm = document.getElementById('task-form');
+
+        // Display tasks from Firestore
+        async function displayTasks() {
+            taskList.innerHTML = '';  // Clear current list
+            const snapshot = await db.collection('tasks').get();
+            snapshot.forEach(doc => {
+                const task = doc.data();
+                const taskItem = document.createElement('li');
+                taskItem.classList.add('task-item');
+                taskItem.innerHTML = `
+                    <strong>${task.title}</strong>: ${task.description} (Due: ${task.dueDate}) <br>
+                    Email: ${task.email}
+                    <button onclick="deleteTask('${doc.id}')" class="delete-button">Delete</button>
+                `;
+                taskList.appendChild(taskItem);
+            });
+        }
+
+        // Add task to Firestore
+        taskForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const dueDate = document.getElementById('due-date').value;
+            const email = document.getElementById('email').value;
+
+            await db.collection('tasks').add({ title, description, dueDate, email });
+            displayTasks();  // Refresh the task list
+            taskForm.reset();  // Clear form
+        });
+
+        // Delete task from Firestore
+        async function deleteTask(taskId) {
+            await db.collection('tasks').doc(taskId).delete();
+            displayTasks();  // Refresh the task list
+        }
+
+        // Initial load of tasks
+        displayTasks();
+    </script>
+</body>
+</html>
